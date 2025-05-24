@@ -1,66 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>Login</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body
-        class="bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center min-h-screen text-white">
-        <div
-            class="bg-gray-900 border border-gray-700 p-8 rounded-2xl shadow-xl w-full max-w-sm">
-            <h2 class="text-3xl font-bold text-center mb-6">Akashee Fun Chat</h2>
-            <form id="login-form" class="space-y-4">
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        required
-                        class="mt-1 block w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg shadow-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter your username"/>
-                </div>
-                <button
-                    type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded-lg font-medium">
-                    Join Chat
-                </button>
-            </form>
-        </div>
+<html lang="en" id="html-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Akashee Fun Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Configure Tailwind to use 'class' strategy for dark mode
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <style>
+    /* Optional: Smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body
+  class="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-200 dark:to-gray-300 flex items-center justify-center min-h-screen text-white dark:text-gray-900 transition-colors duration-300"
+>
+  <div class="absolute top-4 right-6 z-50">
+    <button
+      id="theme-toggle"
+      class="bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-4 py-2 rounded-lg shadow transition"
+      aria-label="Toggle dark/light mode"
+    >
+      Toggle Theme
+    </button>
+  </div>
 
-        <script>
-            document
-                .getElementById("login-form")
-                .addEventListener("submit", async function (e) {
-                    e.preventDefault();
-                    const username = document
-                        .getElementById("username")
-                        .value
-                        .trim();
-                    if (!username) 
-                        return;
-                    
-                    const response = await fetch("/users");
-                    const existingUsers = await response.json();
+  <div
+    class="bg-gray-900 dark:bg-gray-100 border border-gray-700 dark:border-gray-300 p-8 rounded-2xl shadow-xl w-full max-w-sm transition-colors duration-300"
+  >
+    <h2 class="text-3xl font-bold text-center mb-6">Akashee Fun Chat</h2>
+    <form id="login-form" class="space-y-4" autocomplete="off">
+      <div>
+        <label
+          for="username"
+          class="block text-sm font-medium text-gray-300 dark:text-gray-700"
+          >Username</label
+        >
+        <input
+          type="text"
+          id="username"
+          name="username"
+          required
+          placeholder="Enter your username"
+          class="mt-1 block w-full px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-gray-600 dark:border-gray-400 rounded-lg shadow-sm text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+          autocomplete="off"
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition text-white py-2 rounded-lg font-medium"
+      >
+        Join Chat
+      </button>
+    </form>
+  </div>
 
-                    if (existingUsers && existingUsers.includes(username)) {
-                        alert("Username already taken. Try another one.");
-                        return;
-                    }
+  <script>
+    const themeToggle = document.getElementById("theme-toggle");
+    const htmlRoot = document.getElementById("html-root");
 
-                    if (username) {
-                        localStorage.setItem("username", username);
-                    }
-                    const user = localStorage.getItem("username");
+    // Load saved theme preference or default to dark
+    if (localStorage.getItem("theme") === "dark") {
+      htmlRoot.classList.add("dark");
+    } else if (localStorage.getItem("theme") === "light") {
+      htmlRoot.classList.remove("dark");
+    } else {
+      // If no preference saved, detect system preference
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        htmlRoot.classList.add("dark");
+      }
+    }
 
-                    if (!user || user === "null") {
-                        window.location.href = "/login.html";
-                    }
+    themeToggle.addEventListener("click", () => {
+      htmlRoot.classList.toggle("dark");
+      if (htmlRoot.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+      } else {
+        localStorage.setItem("theme", "light");
+      }
+    });
 
-                    window.location.href = "../index.html";
-                });
-        </script>
-    </body>
+    // Login form logic (unchanged)
+    document
+      .getElementById("login-form")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const usernameInput = document.getElementById("username");
+        const username = usernameInput.value.trim();
+
+        if (!username) {
+          alert("Please enter a username.");
+          return;
+        }
+
+        try {
+          const response = await fetch("/users");
+          if (!response.ok) {
+            throw new Error("Failed to fetch existing users");
+          }
+
+          const existingUsers = await response.json();
+
+          if (existingUsers.includes(username)) {
+            alert("Username already taken. Try another one.");
+            return;
+          }
+
+          localStorage.setItem("username", username);
+          window.location.href = "/index.html";
+        } catch (error) {
+          console.error(error);
+          alert(
+            "Error checking username availability. Please try again later."
+          );
+        }
+      });
+  </script>
+</body>
 </html>
