@@ -2,6 +2,15 @@
 
 Chatio is a real-time chat application built using Node.js, Express, and Socket.IO. This project is purely for fun and practical learning of WebSocket concepts. Inspired by Omegle, it serves as a foundation to explore real-time communication, with future plans to include features like audit logs and live video transmission using WebRTC. In Future planning to scale this via Spring WebSocket with more concepts . 
 
+<img width="1089" alt="Screenshot 2025-05-24 at 11 24 24 PM" src="https://github.com/user-attachments/assets/4ef5ebba-aa0e-4c84-b00e-5beac7465b50" />
+<img width="1501" alt="Screenshot 2025-05-24 at 11 24 18 PM" src="https://github.com/user-attachments/assets/72d9fdef-9b26-4212-bdcb-1f93800442ae" />
+
+
+https://github.com/user-attachments/assets/1d90c7da-b0bb-4f23-aeec-fde96f9f9417
+
+
+
+
 ## Features
 
 - User login with unique usernames
