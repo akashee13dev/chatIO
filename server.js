@@ -1,15 +1,27 @@
+require("dotenv").config();
 const express = require("express")
 const path = require("path");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "/public")));
-const expressServer = app.listen(8000, () => {});
+
+
+const PORT = process.env.PORT || 8000;
+const expressServer = app.listen(PORT, () => {
+  console.log("Server running on", PORT);
+});
+
 
 app.get("/users", (req, res) => {
     res.send(Array.from(users));
 })
 const socketio = require("socket.io");
-const io = socketio(expressServer, {});
+const io = socketio(expressServer, {
+    cors: {
+        origin: "*",
+        methods: ["GET"]
+      }
+});
 
 const socketToUser = new Map();
 const users = new Set();
