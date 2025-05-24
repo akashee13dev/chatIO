@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Modern Chat UI</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* Optional: Smooth scrollbar */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+            }
+
+        </style>
+    </head>
+    <body
+        class="h-screen bg-gradient-to-r from-gray-900 to-gray-800 text-white font-sans">
+        <div class="flex h-full">
+            <!-- Chat Area (70%) -->
+            
+            <div class="w-[70%] flex flex-col p-6 border-r border-gray-700">
+                <h2 class="text-3xl font-bold text-center mb-6">Akashee Fun Chat</h2>
+                <!-- Messages -->
+                <div id="chat-messages" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                    <!-- Sample Messages -->
+                
+                </div>
+
+                <!-- Input -->
+                <form id="chat-form" class="mt-4 flex gap-3">
+                    <input
+                        id="message-input"
+                        type="text"
+                        placeholder="Type your message..."
+                        class="flex-grow bg-gray-700 text-white px-4 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"/>
+                    <button
+                        type="submit"
+                        id="send_btn"
+                        class="bg-blue-600 hover:bg-blue-700 transition px-5 py-2 rounded-xl shadow">
+                        Send
+                    </button>
+                    <button
+                        id="logout-btn"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Logout
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- User List (30%) -->
+            <div class="w-[30%] bg-gray-800 p-6">
+                <h2 class="text-xl font-semibold border-b border-gray-700 pb-2 mb-4">Online Users</h2>
+                <ul id="user-list" class="space-y-3">
+                    <!-- Users will be added here -->
+                </ul>
+            </div>
+        </div>
+
+        <div id="popup" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg text-center opacity-0 transition-opacity duration-500 pointer-events-none z-50"></div>
+
+        <script src="/socket.io/socket.io.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
