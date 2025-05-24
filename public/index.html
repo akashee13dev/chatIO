@@ -28,9 +28,24 @@
             <div class="absolute top-4 right-6 z-50">
                 <button
                     id="theme-toggle"
-                    class="bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-4 py-2 rounded-lg shadow transition">
-                    Toggle Theme
+                    aria-label="Toggle Theme"
+                    class="bg-gray-300 dark:bg-gray-700 text-black dark:text-white
+                       px-4 py-2 rounded-lg shadow transition flex items-center justify-center w-12 h-12">
+                    <svg
+                        id="theme-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-8 h-8"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+                    </svg>
                 </button>
+
             </div>
 
             <!-- Chat Area (70%) -->
@@ -83,36 +98,46 @@
             class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 px-6 py-3 rounded-lg shadow-lg text-center opacity-0 transition-opacity duration-500 pointer-events-none z-50"></div>
 
         <script>
-            const themeToggle = document.getElementById("theme-toggle");
-            const htmlRoot = document.getElementById("html-root");
 
-            // Load saved theme or default to dark
+            const themeToggle = document.getElementById("theme-toggle");
+            const themeIcon = document.getElementById("theme-icon");
+            const htmlRoot = document.documentElement; // or getElementById("html-root")
+
+            function setIcon(isDark) {
+                if (isDark) {
+                    // Sun icon (light mode)
+                    themeIcon.innerHTML = `
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-10h-1M4.34 12h-1m15.364 4.95l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707-.707M12 7a5 5 0 000 10 5 5 0 000-10z"/>
+    `;
+                } else {
+                    // Moon icon (dark mode)
+                    themeIcon.innerHTML = `
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+    `;
+                }
+            }
+
+            // Initialize based on saved theme
             if (localStorage.getItem("theme") === "dark") {
                 htmlRoot
                     .classList
                     .add("dark");
-            } else if (localStorage.getItem("theme") === "light") {
-                htmlRoot
-                    .classList
-                    .remove("dark");
+                setIcon(true);
             } else {
-                // Use system preference if no stored preference
-                if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                    htmlRoot
-                        .classList
-                        .add("dark");
-                }
+                setIcon(false);
             }
 
             themeToggle.addEventListener("click", () => {
                 htmlRoot
                     .classList
                     .toggle("dark");
-                if (htmlRoot.classList.contains("dark")) {
-                    localStorage.setItem("theme", "dark");
-                } else {
-                    localStorage.setItem("theme", "light");
-                }
+                const isDark = htmlRoot
+                    .classList
+                    .contains("dark");
+                setIcon(isDark);
+                localStorage.setItem("theme", isDark
+                    ? "dark"
+                    : "light");
             });
         </script>
 
